@@ -13,16 +13,20 @@ var keyTab = [{note:'C3', freq:261, key:'w',  keyCode:87,  press:false, osc: und
               {note:'G3#', freq:415, key:'h',  keyCode:72,  press:false, osc: undefined, div: undefined},
               {note:'A3#', freq:466, key:'j',  keyCode:74,  press:false, osc: undefined, div: undefined},
               {note:'C4#', freq:554, key:'l',  keyCode:76,  press:false, osc: undefined, div: undefined},
-              {note:'D4#', freq:622, key:'m',  keyCode:77,  press:false, osc: undefined, div: undefined},
+              {note:'D4#', freq:622, key:'m',  keyCode:77,  press:false, osc: undefined, div: undefined},];
 
-              ];
+var instrument = [ {name: "organ",  h1:2, h2:28/27, h3:3},
+                   {name: "organ2", h1:2 ,h2:55/28, h3:1/2},
+                   {name: "test"   ,h1:3 ,h2:4    , h3:5/6}
+
+]
 
 function showme(event){
     // console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
         if(keyTab[i].keyCode == event.keyCode && !keyTab[i].press){
             keyTab[i].press = true;
-            playNote(keyTab[i]);
+            playNote(keyTab[i], instrument[2]);
             keyTab[i].div = createDivNote(keyTab[i]);
             break
         }
@@ -64,28 +68,29 @@ function initAudio(){
 
 
 
-function playNote(note){
+function playNote(note, instrument){
     var osc = context.createOscillator();
     var osc2 = context.createOscillator();
     //
     var osca = context.createOscillator();
+    var osc3 = context.createOscillator();
+    var distortion = context.createWaveShaper();
+    distortion.curve = makeDistortionCurve(200);
+    distortion.connect(masterVolume);
 
     var tab = [];
     osc.type = 'sine';
     osc.frequency.value = note.freq;
-    osc.detune.value = -10;
-
 
     osca.type = 'sine';
-    osca.frequency.value = note.freq + 2;
-    osca.detune = -5;
+    osca.frequency.value = note.freq*instrument.h1;
 
     osc2.type = 'sine';
-    osc2.frequency = note.freq * 2 + 2;
-    osc2.detune.value = -10;
+    osc2.frequency = note.freq*instrument.h2;
 
-
-    tab.push(osc, osc2, osca);
+    osc3.type  ='sine';
+    osc3.frequency.value = note.freq*instrument.h3;
+    tab.push(osc, osc2, osca, osc3);
 
     note.osc = tab;
 
@@ -152,7 +157,19 @@ function createDivNote(note){
     return div;
 }
 
-
+function makeDistortionCurve(amount) {
+  var k = typeof amount === 'number' ? amount : 50,
+    n_samples = 44100,
+    curve = new Float32Array(n_samples),
+    deg = Math.PI / 180,
+    i = 0,
+    x;
+  for ( ; i < n_samples; ++i ) {
+    x = i * 2 / n_samples - 1;
+    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+  }
+  return curve;
+};
 
 function rand(a){
     return Math.floor(Math.random()*a);
