@@ -1,15 +1,22 @@
-var red:number = 0;
-var green:number = 0;
-var blue:number = 0;
+// var red:number = 0;
+// var green:number = 0;
+// var blue:number = 0;
+//
+// var previousPositionX:number = 0;
+// var previousPositionY:number = 0;
+//
+// function test(event){
+//     var mousex = event.clientX;
+//     var mousey = event.clientY;
+//
+//     var deltax = Math.abs(mouseX - previousPositionX);
+//     var deltay = Math.abs(mouseY - previousPositionY);
+// }
 
-var previousPositionX:number = 0;
-var previousPositionY:number = 0;
+import("synth.js");
 
-function test(event){
-    var mousex = event.clientX;
-    var mousey = event.clientY;
+var test = new AudioContext();
+var volume = context.createGain();
+var oscillators = {};
 
-    var deltax = Math.abs(mouseX - previousPositionX);
-    var deltay = Math.abs(mouseY - previousPositionY);
-
-}
+volume = 0.5;
