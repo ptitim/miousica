@@ -24,9 +24,9 @@ var instrument = [ {name: "organ",  h1:2, h2:28/27, h3:3},
 function showme(event){
     // console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
-        if(keyTab[i].keyCode == event.keyCode && !keyTab[i].press){
+        if((keyTab[i].keyCode == event.keyCode || keyTab[i].key == event.key) && !keyTab[i].press ){
             keyTab[i].press = true;
-            playNote(keyTab[i], instrument[2]);
+            playNote(keyTab[i], instrument[1]);
             keyTab[i].div = createDivNote(keyTab[i]);
             break
         }
@@ -34,8 +34,9 @@ function showme(event){
 }
 
 function stopit(event){
+    console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
-      if(keyTab[i].keyCode == event.keyCode){
+      if(keyTab[i].keyCode == event.keyCode || keyTab[i].key == event.key){
           keyTab[i].press = false;
           stopNote(keyTab[i]);
           var parentElement = document.getElementsByClassName('principal')[0];
@@ -74,9 +75,6 @@ function playNote(note, instrument){
     //
     var osca = context.createOscillator();
     var osc3 = context.createOscillator();
-    var distortion = context.createWaveShaper();
-    distortion.curve = makeDistortionCurve(200);
-    distortion.connect(masterVolume);
 
     var tab = [];
     osc.type = 'sine';
@@ -157,19 +155,25 @@ function createDivNote(note){
     return div;
 }
 
-function makeDistortionCurve(amount) {
-  var k = typeof amount === 'number' ? amount : 50,
-    n_samples = 44100,
-    curve = new Float32Array(n_samples),
-    deg = Math.PI / 180,
-    i = 0,
-    x;
-  for ( ; i < n_samples; ++i ) {
-    x = i * 2 / n_samples - 1;
-    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-  }
-  return curve;
-};
+var freeverb = new Tone.freeverb(0.5, 2000).toMatser()
+var test = new Tone.polySynth()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function rand(a){
     return Math.floor(Math.random()*a);

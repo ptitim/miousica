@@ -12,11 +12,3 @@
 //     var deltax = Math.abs(mouseX - previousPositionX);
 //     var deltay = Math.abs(mouseY - previousPositionY);
 // }
-
-import("synth.js");
-
-var test = new AudioContext();
-var volume = context.createGain();
-var oscillators = {};
-
-volume = 0.5;
