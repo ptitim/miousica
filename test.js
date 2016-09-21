@@ -17,19 +17,38 @@ var keyTab = [{note:'C3', freq:261, key:'w',  keyCode:87,  press:false, osc: und
 
 var instrument = [ {name: "organ",  h1:2, h2:28/27, h3:3},
                    {name: "organ2", h1:2 ,h2:55/28, h3:1/2},
-                   {name: "test"   ,h1:3 ,h2:4    , h3:5/6}
+                   {name: "test"   ,h1:2 ,h2:4    , h3:6}
 
 ]
+var loopTab = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee1",  key:'a', keyCode:65, active: false, audio: undefined},
+               { src:"data/loop/2990.wav",  name:"djumbee2",  key:'z', keyCode:66, active: false, audio: undefined},
+               { src:"data/loop/6067.wav",  name:"batterie1", key:'r', keyCode:82, active: false, audio: undefined},
+               { src:"data/loop/6070.wav",  name:"batterie2", key:'t', keyCode:84, active: false, audio: undefined},
+               { src:"data/loop/6071.wav",  name:"batterie3", key:'y', keyCode:89, active: false, audio: undefined},
+               { src:"data/loop/6073.wav",  name:"batterie4", key:'u', keyCode:86, active: false, audio: undefined},
+               { src:"data/loop/21433.wav", name:"rock1",     key:'o', keyCode:79, active: false, audio: undefined},
+               { src:"data/loop/21437.wav", name:"rock2",     key:'p', keyCode:80, active: false, audio: undefined}];
 
 function showme(event){
+  var code = event.keycode || event.key;
+
     // console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
         if((keyTab[i].keyCode == event.keyCode || keyTab[i].key == event.key) && !keyTab[i].press ){
             keyTab[i].press = true;
-            playNote(keyTab[i], instrument[1]);
+            playNote(keyTab[i], instrument[2]);
             keyTab[i].div = createDivNote(keyTab[i]);
             break
         }
+    }
+    for(var i=0; i < loopTab.length; i++){
+      if((code == loopTab[i].keyCode || code == loopTab[i].key) && !loopTab[i].active){
+          loopTab[i].audio = launchLoop(loopTab[i].src);
+          loopTab[i].active = true;
+      }else if ((code == loopTab[i].keyCode || code == loopTab[i].key) && loopTab[i].active) {
+          loopTab[i].audio.pause();
+          loopTab[i].active = false;
+      }
     }
 }
 
@@ -92,10 +111,16 @@ function playNote(note, instrument){
 
     note.osc = tab;
 
-    for (var i = 0; i < tab.length; i++) {
+    var harmo = context.createGain();
+    harmo .gain.value = 0.01;
+    harmo.connect(context.destination);
+
+    for (var i = 0; i < tab.length - 1; i++) {
       tab[i].connect(masterVolume);
       tab[i].start(context.currentTime);
     }
+    osc3.connect(harmo);
+    osc3.start(context.currentTime);
 }
 
 function stopNote(note){
@@ -155,24 +180,15 @@ function createDivNote(note){
     return div;
 }
 
-var freeverb = new Tone.freeverb(0.5, 2000).toMatser()
-var test = new Tone.polySynth()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function launchLoop(loop){
+      myAudio = new Audio(loop);
+      myAudio.addEventListener('ended', function() {
+          this.currentTime = 0;
+          this.play();
+      }, false);
+      myAudio.play();
+      return myAudio;
+}
 
 
 function rand(a){
