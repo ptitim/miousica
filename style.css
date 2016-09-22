@@ -71,5 +71,10 @@
     height: 50%; }
   to {
     height: 20%; } }
+#canvas {
+  background-color: #222; }
+
+#firstCanvas {
+  position: absolute; }
 
 /*# sourceMappingURL=style.css.map */

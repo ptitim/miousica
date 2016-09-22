@@ -59,7 +59,7 @@
 @keyframes taller {
   from{
       height: 20%;
-      
+
 
   }50%{
       height: 50%;
@@ -68,4 +68,13 @@
       height: 20%;
 
   }
+}
+
+
+#canvas{
+    background-color: #222;
+}
+
+#firstCanvas{
+  position: absolute;
 }

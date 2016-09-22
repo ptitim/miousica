@@ -39,7 +39,7 @@ var piano = new Tone.PolySynth(6, Tone.Synth,{
   },
   "envelope": {
     "attack": 0,
-    "decay": 1,
+    "decay": 4,
     "sustain": 1,
     "release": 0.3
   }
@@ -54,7 +54,7 @@ function play(event){
         console.log(event);
         console.log(keyTab[i]);
         keyTab[i].osc = piano;
-        piano.triggerAttackRelease(keyTab[i].note, 0.5);
+        piano.triggerAttackRelease(keyTab[i].freq, 0.5);
         keyTab[i].press = true;
         break;
       }
@@ -74,7 +74,7 @@ function stop(event){
     for (var i = 0; i < keyTab.length; i++) {
       if(event.keycode == keyTab[i].keyCode || event.key == keyTab[i].key){
                 keyTab[i].press = false;
-                keyTab[i].osc.triggerRelease(keyTab[i].note);
+                keyTab[i].osc.triggerRelease(keyTab[i].freq);
       }
     }
 }

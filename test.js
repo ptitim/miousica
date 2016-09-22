@@ -13,11 +13,11 @@ var keyTab = [{note:'C3', freq:261, key:'w',  keyCode:87,  press:false, osc: und
               {note:'G3#', freq:415, key:'h',  keyCode:72,  press:false, osc: undefined, div: undefined},
               {note:'A3#', freq:466, key:'j',  keyCode:74,  press:false, osc: undefined, div: undefined},
               {note:'C4#', freq:554, key:'l',  keyCode:76,  press:false, osc: undefined, div: undefined},
-              {note:'D4#', freq:622, key:'m',  keyCode:77,  press:false, osc: undefined, div: undefined},];
+              {note:'D4#', freq:622, key:'m',  keyCode:77,  press:false, osc: undefined, div: undefined}];
 
-var instrument = [ {name: "organ",  h1:2, h2:28/27, h3:3},
-                   {name: "organ2", h1:2 ,h2:55/28, h3:1/2},
-                   {name: "test"   ,h1:2 ,h2:4    , h3:6}
+var instruments = [ {name: "organ",  h1:2, h2:28/27, h3:3    , delay: 1000},
+                   {name: "organ2", h1:2 ,h2:55/28, h3:1/2  , delay: 1000},
+                   {name: "test"   ,h1:2 ,h2:4    , h3:2    , delay: 1000}
 
 ]
 var loopTab = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee1",  key:'a', keyCode:65, active: false, audio: undefined},
@@ -28,15 +28,17 @@ var loopTab = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee1",  key:'a
                { src:"data/loop/6073.wav",  name:"batterie4", key:'u', keyCode:86, active: false, audio: undefined},
                { src:"data/loop/21433.wav", name:"rock1",     key:'o', keyCode:79, active: false, audio: undefined},
                { src:"data/loop/21437.wav", name:"rock2",     key:'p', keyCode:80, active: false, audio: undefined}];
-
+var stopAllNotes = [];
 function showme(event){
+
   var code = event.keycode || event.key;
 
     // console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
         if((keyTab[i].keyCode == event.keyCode || keyTab[i].key == event.key) && !keyTab[i].press ){
+          // console.log(event);
             keyTab[i].press = true;
-            playNote(keyTab[i], instrument[2]);
+            playNote(keyTab[i], instruments[2]);
             keyTab[i].div = createDivNote(keyTab[i]);
             break
         }
@@ -53,12 +55,12 @@ function showme(event){
 }
 
 function stopit(event){
-    console.log(event);
+    // console.log(event);
     for (var i = 0; i < keyTab.length; i++) {
       if(keyTab[i].keyCode == event.keyCode || keyTab[i].key == event.key){
           keyTab[i].press = false;
           stopNote(keyTab[i]);
-          var parentElement = document.getElementsByClassName('principal')[0];
+          var parentElement = event.target;
           parentElement.removeChild(keyTab[i].div);
           break;
       }
@@ -70,30 +72,29 @@ function init(){
   document.addEventListener("keydown",showme);
   document.addEventListener("keyup", stopit);
   initAudio();
-  console.log("chargemnt terminer");
+  console.log("chargement terminer");
 }
 
 init();
 
 var masterVolume;
-var context;
+var audioContext;
 
 function initAudio(){
-    context = new AudioContext();
-    masterVolume = context.createGain();
-
+    audioContext = new AudioContext();
+    masterVolume = audioContext.createGain();
     masterVolume.gain.value = 0.2;
-    masterVolume.connect(context.destination);
+    masterVolume.connect(audioContext.destination);
 }
 
 
 
 function playNote(note, instrument){
-    var osc = context.createOscillator();
-    var osc2 = context.createOscillator();
+    var osc = audioContext.createOscillator();
+    var osc2 = audioContext.createOscillator();
     //
-    var osca = context.createOscillator();
-    var osc3 = context.createOscillator();
+    var osca = audioContext.createOscillator();
+    var osc3 = audioContext.createOscillator();
 
     var tab = [];
     osc.type = 'sine';
@@ -111,28 +112,30 @@ function playNote(note, instrument){
 
     note.osc = tab;
 
-    var harmo = context.createGain();
+    var harmo = audioContext.createGain();
     harmo .gain.value = 0.01;
-    harmo.connect(context.destination);
+    harmo.connect(audioContext.destination);
 
     for (var i = 0; i < tab.length - 1; i++) {
       tab[i].connect(masterVolume);
-      tab[i].start(context.currentTime);
+      tab[i].start(audioContext.currentTime);
     }
     osc3.connect(harmo);
-    osc3.start(context.currentTime);
+    osc3.start(audioContext.currentTime);
 }
 
 function stopNote(note){
+  clearAllIntervals(interval);
+  clearCanvas();
+
   for (var i = 0; i < note.osc.length; i++) {
-    note.osc[i].stop(context.currentTime);
+    note.osc[i].stop(audioContext.currentTime);
   }
 }
 
 function createDivNote(note){
     var div = document.createElement('div');
     var rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255)+ ")";
-    // div.style.backgroundColor = rgb;
     div.style.border = "5px ridge " + rgb;
     div.style.borderRadius = "100%";
     div.style.position = "absolute";
@@ -175,7 +178,7 @@ function createDivNote(note){
       div.style.left = randBetween(5,90).toString() + "%";
     }
 
-    var parentElement = document.getElementsByClassName('principal')[0];
+    var parentElement = document.getElementsByTagName('body')[0];
     parentElement.appendChild(div);
     return div;
 }
@@ -187,6 +190,7 @@ function launchLoop(loop){
           this.play();
       }, false);
       myAudio.play();
+      initCanvas();
       return myAudio;
 }
 
