@@ -28,6 +28,7 @@ var loopTab = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee1",  key:'a
                { src:"data/loop/6073.wav",  name:"batterie4", key:'u', keyCode:86, active: false, audio: undefined},
                { src:"data/loop/21433.wav", name:"rock1",     key:'o', keyCode:79, active: false, audio: undefined},
                { src:"data/loop/21437.wav", name:"rock2",     key:'p', keyCode:80, active: false, audio: undefined}];
+
 var stopAllNotes = [];
 function showme(event){
 
