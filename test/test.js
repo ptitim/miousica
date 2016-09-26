@@ -143,7 +143,7 @@ function createDivNote(note){
     div.style.top = randBetween(10,20).toString() + '%';
     div.style.height = "8vh";
     div.style.width = "8vh";
-    div.className += "anim"
+    div.className += "anim";
 
     if(note.note == "C3"){
       div.style.left = randBetween(0,10).toString() + "%";
