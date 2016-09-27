@@ -1,22 +1,20 @@
-var KEYTAB = [{ note: 'C3', freq: 261, key: 'w', keyCode: 87 },
-    { note: 'D3', freq: 293, key: 'x', keyCode: 88 },
-    { note: 'E3', freq: 329, key: 'c', keyCode: 67 },
-    { note: 'F3', freq: 349, key: 'v', keyCode: 86 },
-    { note: 'G3', freq: 392, key: 'b', keyCode: 66 },
-    { note: 'A3', freq: 440, key: 'n', keyCode: 78 },
-    { note: 'B3', freq: 494, key: ',', keyCode: 18 },
-    { note: 'C4', freq: 523, key: ';', keyCode: 59 },
-    { note: 'D4', freq: 587, key: ':', keyCode: 58 },
-    { note: 'C3#', freq: 277, key: 's', keyCode: 83 },
-    { note: 'D3#', freq: 311, key: 'd', keyCode: 68 },
-    { note: 'F3#', freq: 370, key: 'g', keyCode: 71 },
-    { note: 'G3#', freq: 415, key: 'h', keyCode: 72 },
-    { note: 'A3#', freq: 466, key: 'j', keyCode: 74 },
-    { note: 'C4#', freq: 554, key: 'l', keyCode: 76 },
-    { note: 'D4#', freq: 622, key: 'm', keyCode: 77 }];
-var INSTRUMENTS = [{ name: "organ", h1: 2, h2: 28 / 27, h3: 3, delay: 1000 },
-    { name: "organ2", h1: 2, h2: 55 / 28, h3: 1 / 2, delay: 1000 },
-    { name: "test", h1: 2, h2: 4, h3: 2, delay: 1000 }
+var KEYTABAZERTY = [{ note: 'C3', freq: 261, key: 'w', keyCode: 87, press: false, object: undefined },
+    { note: 'D3', freq: 293, key: 'x', keyCode: 88, press: false, object: undefined },
+    { note: 'E3', freq: 329, key: 'c', keyCode: 67, press: false, object: undefined },
+    { note: 'F3', freq: 349, key: 'v', keyCode: 86, press: false, object: undefined },
+    { note: 'G3', freq: 392, key: 'b', keyCode: 66, press: false, object: undefined },
+    { note: 'A3', freq: 440, key: 'n', keyCode: 78, press: false, object: undefined },
+    { note: 'B3', freq: 494, key: ',', keyCode: 18, press: false, object: undefined },
+    { note: 'C4', freq: 523, key: ';', keyCode: 59, press: false, object: undefined },
+    { note: 'D4', freq: 587, key: ':', keyCode: 58, press: false, object: undefined },
+    { note: 'C3#', freq: 277, key: 's', keyCode: 83, press: false, object: undefined },
+    { note: 'D3#', freq: 311, key: 'd', keyCode: 68, press: false, object: undefined },
+    { note: 'F3#', freq: 370, key: 'g', keyCode: 71, press: false, object: undefined },
+    { note: 'G3#', freq: 415, key: 'h', keyCode: 72, press: false, object: undefined },
+    { note: 'A3#', freq: 466, key: 'j', keyCode: 74, press: false, object: undefined },
+    { note: 'C4#', freq: 554, key: 'l', keyCode: 76, press: false, object: undefined },
+    { note: 'D4#', freq: 622, key: 'm', keyCode: 77, press: false, object: undefined }];
+var INSTRUMENTS = [{ name: "phase", h1: 0.5, h2: 1.2 * Math.PI, h3: 0.5, decayTonal: 0.05, decayH1: 0.06, decayH2: 0.1, decayH3: 0.08, gainTonal: 0.6, gainH1: 0.6, gainH2: 0.2, gainH3: 0.2 }
 ];
 var LOOPTAB = [{ src: "data/loop/looperman-l-1319.wav", name: "djumbee1", key: 'a', keyCode: 65, active: false, audio: undefined },
     { src: "data/loop/2990.wav", name: "djumbee2", key: 'z', keyCode: 66, active: false, audio: undefined },
@@ -38,28 +36,26 @@ var Note = (function () {
         this.instrument = instrument;
     }
     return Note;
-})();
+}());
 var Instrument = (function () {
-    function Instrument(harmo1, harmo2, harmo3, decayTonal, decayH1, decayH2, decayH3, release) {
-        this.harmo1 = harmo1;
-        this.harmo2 = harmo2;
-        this.harmo3 = harmo3;
-        this.decayTonal = decayTonal;
-        this.decayH1 = decayH1;
-        this.decayH2 = decayH2;
-        this.decayH3 = decayH3;
-        this.release = release;
-        this.harmo1 = harmo1;
-        this.decayH1 = decayH1;
-        this.harmo2 = harmo2;
-        this.decayH2 = decayH2;
-        this.harmo3 = harmo3;
-        this.decayH3 = decayH3;
-        this.release = release;
-        this.gainTonalInitialValue = 1;
-        this.gainH1InitialValue = 0.5;
-        this.gainH2InitialValue = 0.2;
-        this.gainH3InitialValue = 0.1;
+    function Instrument(prop) {
+        this.prop = prop;
+        this.regTypeOsc = /sine|triangle|square|sawtooth/;
+        this.decayTonal = prop.decayTonal;
+        this.harmo1 = prop.h1;
+        this.decayH1 = prop.decayH1;
+        this.harmo2 = prop.h2;
+        this.decayH2 = prop.decayH2;
+        this.harmo3 = prop.h3;
+        this.decayH3 = prop.decayH3;
+        this.setOscTonal("sine");
+        this.setOscH1("sine");
+        this.setOscH2("sine");
+        this.setOscH3("sine");
+        this.gainTonalInitialValue = prop.gainTonalInitialValue || 1;
+        this.gainH1InitialValue = prop.gainH1InitialValue || 0.5;
+        this.gainH2InitialValue = prop.gainH2InitialValue || 0.3;
+        this.gainH3InitialValue = prop.gainH3InitialValue || 0.1;
         this.intervals = [];
         this.createContext();
     }
@@ -110,6 +106,7 @@ var Instrument = (function () {
         for (var i = 0; i < this.oscillators.length; i++) {
             this.oscillators[i].start(this.context.currentTime);
         }
+        return { inteval: this.intervals, oscillators: this.oscillators };
     };
     ;
     Instrument.prototype.startDecay = function () {
@@ -123,11 +120,10 @@ var Instrument = (function () {
         this.gainH1.gain.value = this.gainH1.gain.value <= 0 ? 0 : this.gainH1.gain.value;
         this.gainH2.gain.value = this.gainH2.gain.value <= 0 ? 0 : this.gainH2.gain.value;
         this.gainH3.gain.value = this.gainH3.gain.value <= 0 ? 0 : this.gainH3.gain.value;
-        if (this.gainTonal.gain.value <= 0 &&
-            this.gainH1.gain.value <= 0 &&
-            this.gainH2.gain.value <= 0 &&
-            this.gainH3.gain.value <= 0) {
-            this.stop();
+        if (this.gainTonal.gain.value <= 0 && this.gainH1.gain.value <= 0 && this.gainH2.gain.value <= 0 && this.gainH3.gain.value <= 0) {
+            while (this.intervals.length > 0) {
+                clearInterval(this.intervals[0]);
+            }
         }
         this.gainTonalPreviousValue = this.gainTonal.gain.value.toFixed(2);
         this.gainH1IPreviousValue = this.gainH1.gain.value.toFixed(2);
@@ -135,11 +131,64 @@ var Instrument = (function () {
         this.gainH3PreviousValue = this.gainH3.gain.value.toFixed(2);
     };
     ;
-    Instrument.prototype.stop = function () {
-        for (var i = 0; i < this.oscillators.length; i++) {
-            this.oscillators[i].stop(this.context.currentTime);
+    Instrument.prototype.stop = function (obj) {
+        var interlength = obj.oscillators.length;
+        for (var i = 0; i < interlength; i++) {
+            obj.oscillators[i].stop(this.context.currentTime);
         }
-        clearInterval(this.intervals[0]);
+        var len = this.intervals.length;
+        for (var i = 0; i < len; i++) {
+            clearInterval(obj.intervals[i]);
+        }
     };
+    Instrument.prototype.setOscTonal = function (type) {
+        type.match(this.regTypeOsc) ? this.oscTonal = type : console.log("Invalid type for oscTonal");
+    };
+    ;
+    Instrument.prototype.setOscH1 = function (type) {
+        type.match(this.regTypeOsc) ? this.oscH1 = type : console.log("Invalid type for oscH1");
+    };
+    ;
+    Instrument.prototype.setOscH2 = function (type) {
+        type.match(this.regTypeOsc) ? this.oscH2 = type : console.log("Invalid type for oscH2");
+    };
+    ;
+    Instrument.prototype.setOscH3 = function (type) {
+        type.match(this.regTypeOsc) ? this.oscH3 = type : console.log("Invalid type for oscH3");
+    };
+    ;
     return Instrument;
-})();
+}());
+;
+var piano = new Instrument(INSTRUMENTS[0]);
+var notes = [];
+piano.setOscH1('sine');
+piano.setOscH2('triangle');
+function init() {
+    window.addEventListener("keydown", noteEvent);
+    window.addEventListener("keyup", noteStop);
+}
+init();
+function noteEvent(event) {
+    var key = event.key;
+    // console.log(event);
+    switch (key) {
+        case KEYTABAZERTY[0].key:
+            if (!KEYTABAZERTY[0].press) {
+                console.log(KEYTABAZERTY[0].press);
+                KEYTABAZERTY[0].object = piano.play(KEYTABAZERTY[0].freq);
+                KEYTABAZERTY[0].press = true;
+            }
+            break;
+    }
+}
+function noteStop(event) {
+    var key = event.key;
+    switch (key) {
+        case KEYTABAZERTY[0].key:
+            console.log("tg");
+            KEYTABAZERTY[0].press = false;
+            piano.stop(KEYTABAZERTY[0].object);
+    }
+}
+var anims;

@@ -24,62 +24,91 @@ var Canvas = (function () {
         return this.canvas;
     };
     return Canvas;
-})();
+}());
 var RoueDentée = (function () {
     function RoueDentée() {
-        this.canvas = new Canvas(rand(window.innerWidth), rand(window.innerHeight), 100, 100, idGen("canvas"));
+        this.canvas = new Canvas(rand(window.innerWidth), rand(window.innerHeight), 80, 80, idGen("canvas"));
         this.htmlCanvas = this.canvas.html;
         this.context = this.htmlCanvas.getContext('2d');
         this.originX = this.canvas.width / 2;
         this.originY = this.canvas.height / 2;
-        this.lineWidth = 5;
+        this.lineWidth = 3;
         this.acLength = 0;
         this.maxLength = 25;
+        this.duree = 1;
+        this.speed = 2;
+        this.htmlCanvas.style.position = "absolute";
         this.rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255) + ")";
         this.avancement = 0;
+        this.randomPlacement();
     }
     RoueDentée.prototype.animate = function () {
         this.clearCanvas();
         this.context.strokeStyle = this.rgb;
         this.context.lineWidth = this.lineWidth;
-        // top bar
+        // top
         this.context.beginPath();
-        this.context.moveTo(this.originX, this.originY - this.avancement);
-        this.context.lineTo(this.originX, this.originY - this.avancement - this.acLength);
+        this.context.moveTo(this.originX, this.originY - this.avancement / 2);
+        this.context.lineTo(this.originX, this.originY - this.avancement / 2 - this.acLength);
         this.context.closePath();
         this.context.stroke();
         // top right
         this.context.beginPath();
-        this.context.moveTo(this.originX + this.avancement, this.originY - this.avancement);
-        this.context.lineTo(this.originX + this.avancement + this.acLength / 1.5, this.originY - this.avancement - this.acLength / 1.5);
+        this.context.moveTo(this.originX + this.avancement / 2, this.originY - this.avancement / 2);
+        this.context.lineTo(this.originX + this.avancement / 2 + this.acLength / 1.2, this.originY - this.avancement / 2 - this.acLength / 1.2);
         this.context.stroke();
         this.context.closePath();
         // right
         this.context.beginPath();
-        this.context.moveTo(this.originX + this.avancement, this.originY);
-        this.context.lineTo(this.originX + this.avancement + this.acLength, this.originY);
+        this.context.moveTo(this.originX + this.avancement / 2, this.originY);
+        this.context.lineTo(this.originX + this.avancement / 2 + this.acLength, this.originY);
         this.context.stroke();
         this.context.closePath();
         // bottom right
         this.context.beginPath();
-        this.context.moveTo(this.originX + this.avancement, this.originY + this.avancement);
-        this.context.lineTo(this.originX + this.avancement + this.acLength / 1.5, this.originY + this.avancement + this.acLength);
+        this.context.moveTo(this.originX + this.avancement / 2, this.originY + this.avancement / 2);
+        this.context.lineTo(this.originX + this.avancement / 2 + this.acLength / 1.2, this.originY + this.avancement / 2 + this.acLength / 1.2);
         this.context.stroke();
         this.context.closePath();
         //bottom
         this.context.beginPath();
-        this.context.moveTo(this.originX, this.originY + this.avancement);
-        this.context.lineTo(this.originX, this.originY + this.avancement + this.acLength);
+        this.context.moveTo(this.originX, this.originY + this.avancement / 2);
+        this.context.lineTo(this.originX, this.originY + this.avancement / 2 + this.acLength);
+        this.context.stroke();
+        this.context.closePath();
+        // bottom left
+        this.context.beginPath();
+        this.context.moveTo(this.originX - this.avancement / 2, this.originY + this.avancement / 2);
+        this.context.lineTo(this.originX - this.avancement / 2 - this.acLength, this.originY + this.avancement / 2 + this.acLength / 1.2);
+        this.context.stroke();
+        this.context.closePath();
+        // left
+        this.context.beginPath();
+        this.context.moveTo(this.originX - this.avancement / 2, this.originY);
+        this.context.lineTo(this.originX - this.avancement / 2 - this.acLength, this.originY);
+        this.context.stroke();
+        this.context.closePath();
+        // top left
+        this.context.beginPath();
+        this.context.moveTo(this.originX - this.avancement / 2, this.originY - this.avancement / 2);
+        this.context.lineTo(this.originX - this.avancement / 2 - this.acLength / 1.2, this.originY - this.avancement / 2 - this.acLength / 1.2);
         this.context.stroke();
         this.context.closePath();
         if (this.avancement < this.canvas.width / 2) {
             console.log("this", this.avancement);
-            this.acLength > this.maxLength ? this.acLength : this.acLength += 3;
-            // this.acLength > this.maxLength ? this.avancement++: this.avancement++;
+            this.acLength > this.maxLength ? this.acLength : this.acLength += 1;
+            this.avancement += this.speed;
+            this.time = setTimeout(this.animate.bind(this), this.duree);
+        }
+        else if (this.avancement >= this.canvas.width / 2 && this.acLength > 0) {
+            console.log("this length", this.acLength);
             this.avancement += 2;
-            this.time = setTimeout(this.animate.bind(this), 10);
+            this.acLength -= 2;
+            this.time = setTimeout(this.animate.bind(this), this.duree);
         }
         else {
+            this.avancement = 0;
+            this.acLength = 0;
             this.reset();
             clearTimeout(this.time);
         }
@@ -91,7 +120,12 @@ var RoueDentée = (function () {
         this.rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255) + ")";
         this.avancement = 0;
         this.acLength = 0;
+        this.randomPlacement();
+    };
+    RoueDentée.prototype.randomPlacement = function () {
+        this.htmlCanvas.style.top = rand(80) + "%";
+        this.htmlCanvas.style.left = rand(80) + "%";
     };
     return RoueDentée;
-})();
+}());
 var a = new RoueDentée();
