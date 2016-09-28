@@ -26,7 +26,7 @@ var Canvas = (function () {
     return Canvas;
 }());
 var RoueDentée = (function () {
-    function RoueDentée() {
+    function RoueDentée(left, right) {
         this.canvas = new Canvas(rand(window.innerWidth), rand(window.innerHeight), 80, 80, idGen("canvas"));
         this.htmlCanvas = this.canvas.html;
         this.context = this.htmlCanvas.getContext('2d');
@@ -35,8 +35,10 @@ var RoueDentée = (function () {
         this.lineWidth = 3;
         this.acLength = 0;
         this.maxLength = 25;
-        this.duree = 1;
+        this.duree = 10;
         this.speed = 2;
+        this.limitLeft = left;
+        this.limitRight = right;
         this.htmlCanvas.style.position = "absolute";
         this.rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255) + ")";
         this.avancement = 0;
@@ -95,13 +97,11 @@ var RoueDentée = (function () {
         this.context.stroke();
         this.context.closePath();
         if (this.avancement < this.canvas.width / 2) {
-            console.log("this", this.avancement);
             this.acLength > this.maxLength ? this.acLength : this.acLength += 1;
             this.avancement += this.speed;
             this.time = setTimeout(this.animate.bind(this), this.duree);
         }
         else if (this.avancement >= this.canvas.width / 2 && this.acLength > 0) {
-            console.log("this length", this.acLength);
             this.avancement += 2;
             this.acLength -= 2;
             this.time = setTimeout(this.animate.bind(this), this.duree);
@@ -123,9 +123,16 @@ var RoueDentée = (function () {
         this.randomPlacement();
     };
     RoueDentée.prototype.randomPlacement = function () {
-        this.htmlCanvas.style.top = rand(80) + "%";
-        this.htmlCanvas.style.left = rand(80) + "%";
+        this.htmlCanvas.style.top = randBetween(20, 40) + "%";
+        this.htmlCanvas.style.left = randBetween(this.limitRight, this.limitLeft) + "%";
     };
     return RoueDentée;
 }());
-var a = new RoueDentée();
+// return an integer between 0 and a
+function rand(a) {
+    return Math.floor(Math.random() * a);
+}
+//return a positiv integer between b and a
+function randBetween(a, b) {
+    return rand(a) + b;
+}
