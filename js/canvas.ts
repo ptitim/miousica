@@ -142,6 +142,7 @@ class RoueDentée{
       this.acLength = 0;
       this.reset();
       clearTimeout(this.time);
+      this.canvas.html.parentNode.removeChild(this.canvas.html);
     }
   }
   clearCanvas(){
