@@ -122,6 +122,7 @@ var RoueDentée = (function () {
         this.avancement = 0;
         this.acLength = 0;
         this.randomPlacement();
+        this.canvas.html.parentElement.removeChild(this.canvas.html);
     };
     RoueDentée.prototype.randomPlacement = function () {
         this.htmlCanvas.style.top = randBetween(20, 40) + "%";

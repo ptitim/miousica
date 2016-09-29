@@ -172,19 +172,21 @@ var noteLa;
 var noteSi;
 var noteDo2;
 var noteRe2;
+var noteMi2;
 var notes = [];
 function init() {
     window.addEventListener("keydown", noteEvent);
     window.addEventListener("keyup", noteStop);
-    notes.push(noteDo = new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteRe = new Note(KEYTABAZERTY[1], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteMi = new Note(KEYTABAZERTY[2], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteFa = new Note(KEYTABAZERTY[3], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteSol = new Note(KEYTABAZERTY[4], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteLa = new Note(KEYTABAZERTY[5], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteSi = new Note(KEYTABAZERTY[6], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteDo2 = new Note(KEYTABAZERTY[7], new Instrument(INSTRUMENTS[0])));
-    notes.push(noteRe2 = new Note(KEYTABAZERTY[8], new Instrument(INSTRUMENTS[0])));
+    notes.push(noteDo = new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteRe = new Note(KEYTABAZERTY[1], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteMi = new Note(KEYTABAZERTY[2], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteFa = new Note(KEYTABAZERTY[3], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteSol = new Note(KEYTABAZERTY[4], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteLa = new Note(KEYTABAZERTY[5], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteSi = new Note(KEYTABAZERTY[6], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteDo2 = new Note(KEYTABAZERTY[7], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteRe2 = new Note(KEYTABAZERTY[8], new Instrument(INSTRUMENTS[2])));
+    notes.push(noteMi2 = new Note(KEYTABAZERTY[9], new Instrument(INSTRUMENTS[2])));
 }
 function changeInstrument(index) {
     if (INSTRUMENTS[index]) {
@@ -194,6 +196,8 @@ function changeInstrument(index) {
     }
 }
 function noteEvent(event) {
+    console.log(event);
+    event.preventDefault;
     var key = event.key;
     switch (key) {
         case noteDo.key:
@@ -268,6 +272,14 @@ function noteEvent(event) {
                 noteRe2.animation.animate();
             }
             break;
+        case noteMi2.key:
+            if (!noteMi2.press) {
+                noteMi2.note.object = noteMi2.instrument.play(noteMi2.frequency);
+                noteMi2.press = true;
+                noteMi2.animation = new RoueDentée(87, 6);
+                noteMi2.animation.animate();
+            }
+            break;
     }
 }
 function noteStop(event) {
@@ -308,6 +320,10 @@ function noteStop(event) {
         case noteRe2.key:
             noteRe2.press = false;
             noteRe2.instrument.stop();
+            break;
+        case noteMi2.key:
+            noteMi2.press = false;
+            noteMi2.instrument.stop();
             break;
     }
 }

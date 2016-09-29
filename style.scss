@@ -4,68 +4,10 @@
 }
 
 .principal{
-
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-wrap: wrap;
     background-color: #222;
-}
-
-@keyframes bigger {
-    from{
-        transform: scale(1);
-    }
-    50%{
-        transform: scale(3);
-    }to{
-        transform: scale(1);
-    }
-}
-
-.anim{
-    animation-name: bigger;
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-}
-
-.tent{
-  position: absolute;
-  top: 20vh;
-  left: 5vw;
-  height: 20vh;
-  max-height:40vh;
-  width: 20vh;
-}
-
-.trait{
-  position: absolute;
-  transform-origin: top;
-  height: 20%;
-  width: 5%;
-  border-radius: 5px;
-  background-color: rgba(242, 63, 63, 0.88);
-  animation-name: taller;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-}
-
-@for $i from 1 through 8{
-    #t#{$i} {
-      transform: rotate(45deg * $i);
-    }
-}
-
-@keyframes taller {
-  from{
-      height: 20%;
-
-
-  }50%{
-      height: 50%;
-
-  }to{
-      height: 20%;
-
-  }
 }
