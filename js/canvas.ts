@@ -10,6 +10,7 @@ class Canvas{
 
   constructor(private originX:number,private originY: number,private width:number,private height: number, public id:string){
     this.canvas = document.createElement('canvas');
+    this.canvas.pointerEvents = "none";
     this.canvas.width = width;
     this.canvas.height = height;
     this.canvas.id = id;
@@ -142,7 +143,6 @@ class RoueDentée{
       this.acLength = 0;
       this.reset();
       clearTimeout(this.time);
-      this.canvas.html.parentNode.removeChild(this.canvas.html);
     }
   }
   clearCanvas(){

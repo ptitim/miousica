@@ -11,6 +11,7 @@ var Canvas = (function () {
         this.height = height;
         this.id = id;
         this.canvas = document.createElement('canvas');
+        this.canvas.pointerEvents = "none";
         this.canvas.width = width;
         this.canvas.height = height;
         this.canvas.id = id;

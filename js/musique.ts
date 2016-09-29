@@ -1,23 +1,23 @@
-const KEYTABAZERTY:Array<any>  = [{note:'C3', freq:261, key:'w',  keyCode:87, press: false, object: undefined},
-                     {note:'D3', freq:293, key:'x',  keyCode:88, press: false, object: undefined},
-                     {note:'E3', freq:329, key:'c',  keyCode:67, press: false, object: undefined},
-                     {note:'F3', freq:349, key:'v',  keyCode:86, press: false, object: undefined},
-                     {note:'G3', freq:392, key:'b',  keyCode:66, press: false, object: undefined},
-                     {note:'A3', freq:440, key:'n',  keyCode:78, press: false, object: undefined},
-                     {note:'B3', freq:494, key:',',  keyCode:18, press: false, object: undefined},
-                     {note:'C4', freq:523, key:';',  keyCode:59, press: false, object: undefined},
-                     {note:'D4', freq:587, key:':',  keyCode:58, press: false, object: undefined},
-                     {note:'C3#', freq:277, key:'s',  keyCode:83, press: false, object: undefined},
-                     {note:'D3#', freq:311, key:'d',  keyCode:68, press: false, object: undefined},
-                     {note:'F3#', freq:370, key:'g',  keyCode:71, press: false, object: undefined},
-                     {note:'G3#', freq:415, key:'h',  keyCode:72, press: false, object: undefined},
-                     {note:'A3#', freq:466, key:'j',  keyCode:74, press: false, object: undefined},
-                     {note:'C4#', freq:554, key:'l',  keyCode:76, press: false, object: undefined},
-                     {note:'D4#', freq:622, key:'m',  keyCode:77, press: false, object: undefined}];
-
-const INSTRUMENTS:Array<any> = [{name:"phase",   h1:0.5, h2:2,   decayTonal:0.1,  decayH1:0.3, decayH2:0.1,  gainTonal:0.8, gainH1:0.4, gainH2:0.2},
-                                {name:"drum",    h1:0.7, h2:0.2, decayTonal:0.5,  decayH1:0.5, decayH2:0.5,  gainTonal:0.8, gainH1:0.4, gainH2:0.4}
-]
+// const KEYTABAZERTY:Array<any>  = [{note:'C3', freq:261, key:'w',  keyCode:87, press: false, object: undefined},
+//                      {note:'D3', freq:293, key:'x',  keyCode:88, press: false, object: undefined},
+//                      {note:'E3', freq:329, key:'c',  keyCode:67, press: false, object: undefined},
+//                      {note:'F3', freq:349, key:'v',  keyCode:86, press: false, object: undefined},
+//                      {note:'G3', freq:392, key:'b',  keyCode:66, press: false, object: undefined},
+//                      {note:'A3', freq:440, key:'n',  keyCode:78, press: false, object: undefined},
+//                      {note:'B3', freq:494, key:',',  keyCode:18, press: false, object: undefined},
+//                      {note:'C4', freq:523, key:';',  keyCode:59, press: false, object: undefined},
+//                      {note:'D4', freq:587, key:':',  keyCode:58, press: false, object: undefined},
+//                      {note:'C3#', freq:277, key:'s',  keyCode:83, press: false, object: undefined},
+//                      {note:'D3#', freq:311, key:'d',  keyCode:68, press: false, object: undefined},
+//                      {note:'F3#', freq:370, key:'g',  keyCode:71, press: false, object: undefined},
+//                      {note:'G3#', freq:415, key:'h',  keyCode:72, press: false, object: undefined},
+//                      {note:'A3#', freq:466, key:'j',  keyCode:74, press: false, object: undefined},
+//                      {note:'C4#', freq:554, key:'l',  keyCode:76, press: false, object: undefined},
+//                      {note:'D4#', freq:622, key:'m',  keyCode:77, press: false, object: undefined}];
+//
+// const INSTRUMENTS:Array<any> = [{name:"phase",   h1:0.5, h2:2,   decayTonal:0.1,  decayH1:0.3, decayH2:0.1,  gainTonal:0.8, gainH1:0.4, gainH2:0.2},
+//                                 {name:"drum",    h1:0.7, h2:0.2, decayTonal:0.5,  decayH1:0.5, decayH2:0.5,  gainTonal:0.8, gainH1:0.4, gainH2:0.4}
+// ]
 var LOOPTAB:Array<any> = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee1",  key:'a', keyCode:65, active: false, audio: undefined},
                           { src:"data/loop/2990.wav",  name:"djumbee2",  key:'z', keyCode:66, active: false, audio: undefined},
                           { src:"data/loop/6067.wav",  name:"batterie1", key:'r', keyCode:82, active: false, audio: undefined},
@@ -26,6 +26,29 @@ var LOOPTAB:Array<any> = [{ src:"data/loop/looperman-l-1319.wav",  name:"djumbee
                           { src:"data/loop/6073.wav",  name:"batterie4", key:'u', keyCode:86, active: false, audio: undefined},
                           { src:"data/loop/21433.wav", name:"rock1",     key:'o', keyCode:79, active: false, audio: undefined},
                           { src:"data/loop/21437.wav", name:"rock2",     key:'p', keyCode:80, active: false, audio: undefined}];
+
+  var test = jsonToVar("data.json");
+  function jsonToVar(file:string):any{
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(){test = JSON.parse(xhr.response); bonjour(); init();};
+    xhr.onerror = function(){console.log("Error ajax")}
+
+    if(file.match(/\.json$/))
+      xhr.open("GET", file, true);
+    else
+      console.log("Invalid File: send json exclusively")
+
+    xhr.send(null);
+  }
+
+  var INSTRUMENTS:any;
+  var KEYTABAZERTY:any;
+
+function bonjour(){
+  INSTRUMENTS = test.INSTRUMENTS;
+  KEYTABAZERTY = test.KEYTABAZERTY;
+}
+
 
 class Note{
   public frequency:number;
@@ -38,7 +61,9 @@ class Note{
       this.key = note.key;
       this.frequency = this.note.freq;
       this.instrument = this.instrument;
-
+  }
+  setInstrument(instru:Instrument){
+    this.instrument = instru;
   }
 }
 
@@ -145,10 +170,6 @@ class Instrument{
                 };
 
                 startDecay(){
-                  console.log("decay",this.gainTonal.gain.value);
-                  console.log("decay h1",this.gainH1.gain.value);
-                  console.log("decay h2",this.gainH2.gain.value);
-
                   this.gainTonal.gain.value =  this.gainTonalPreviousValue - this.decayTonal;
                   this.gainH1.gain.value = this.gainH1IPreviousValue - this.decayH1;
                   this.gainH2.gain.value = this.gainH2PreviousValue - this.decayH2;
@@ -190,23 +211,38 @@ class Instrument{
 };
 
 // var piano = new Instrument(INSTRUMENTS[0]);
-
-var noteDo =  new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[1]));
-var noteRe =  new Note(KEYTABAZERTY[1], new Instrument(INSTRUMENTS[1]));
-var noteMi =  new Note(KEYTABAZERTY[2], new Instrument(INSTRUMENTS[1]));
-var noteFa =  new Note(KEYTABAZERTY[3], new Instrument(INSTRUMENTS[1]));
-var noteSol = new Note(KEYTABAZERTY[4], new Instrument(INSTRUMENTS[1]));
-var noteLa =  new Note(KEYTABAZERTY[5], new Instrument(INSTRUMENTS[1]));
-var noteSi =  new Note(KEYTABAZERTY[6], new Instrument(INSTRUMENTS[1]));
-var noteDo2 = new Note(KEYTABAZERTY[7], new Instrument(INSTRUMENTS[1]));
-var noteRe2 = new Note(KEYTABAZERTY[8], new Instrument(INSTRUMENTS[1]));
-
+var noteDo:Note;
+var noteRe:Note;
+var noteMi:Note;
+var noteFa:Note;
+var noteSol:Note;
+var noteLa:Note;
+var noteSi:Note;
+var noteDo2:Note;
+var noteRe2:Note;
+var notes:Array<Note> = [];
 
 function init(){
   window.addEventListener("keydown", noteEvent);
   window.addEventListener("keyup", noteStop);
+  notes.push(noteDo =  new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteRe =  new Note(KEYTABAZERTY[1], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteMi =  new Note(KEYTABAZERTY[2], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteFa =  new Note(KEYTABAZERTY[3], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteSol = new Note(KEYTABAZERTY[4], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteLa =  new Note(KEYTABAZERTY[5], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteSi =  new Note(KEYTABAZERTY[6], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteDo2 = new Note(KEYTABAZERTY[7], new Instrument(INSTRUMENTS[0])));
+  notes.push(noteRe2 = new Note(KEYTABAZERTY[8], new Instrument(INSTRUMENTS[0])));
 }
-init();
+
+function changeInstrument(index:number){
+  if(INSTRUMENTS[index]){
+    for(let i = 0; i < notes.length; i++){
+      notes[i].setInstrument(new Instrument(INSTRUMENTS[index]));
+    }
+  }
+}
 
 function noteEvent(event:any){
       var key = event.key;
@@ -328,4 +364,3 @@ function noteStop(event:any){
         break;
     }
 }
-
