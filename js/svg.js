@@ -4,3 +4,8 @@ function svgTest() {
     var image = svg.image('data/img/blue-154328.svg');
     image.size(100, 100);
 }
+function createContainer(index) {
+    var ele = document.createElement('div');
+    ele.style.position = "absolute";
+    ele.style.top = randBetween(20, 19).toString() + "%";
+}

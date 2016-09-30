@@ -1,23 +1,3 @@
-// const KEYTABAZERTY:Array<any>  = [{note:'C3', freq:261, key:'w',  keyCode:87, press: false, object: undefined},
-//                      {note:'D3', freq:293, key:'x',  keyCode:88, press: false, object: undefined},
-//                      {note:'E3', freq:329, key:'c',  keyCode:67, press: false, object: undefined},
-//                      {note:'F3', freq:349, key:'v',  keyCode:86, press: false, object: undefined},
-//                      {note:'G3', freq:392, key:'b',  keyCode:66, press: false, object: undefined},
-//                      {note:'A3', freq:440, key:'n',  keyCode:78, press: false, object: undefined},
-//                      {note:'B3', freq:494, key:',',  keyCode:18, press: false, object: undefined},
-//                      {note:'C4', freq:523, key:';',  keyCode:59, press: false, object: undefined},
-//                      {note:'D4', freq:587, key:':',  keyCode:58, press: false, object: undefined},
-//                      {note:'C3#', freq:277, key:'s',  keyCode:83, press: false, object: undefined},
-//                      {note:'D3#', freq:311, key:'d',  keyCode:68, press: false, object: undefined},
-//                      {note:'F3#', freq:370, key:'g',  keyCode:71, press: false, object: undefined},
-//                      {note:'G3#', freq:415, key:'h',  keyCode:72, press: false, object: undefined},
-//                      {note:'A3#', freq:466, key:'j',  keyCode:74, press: false, object: undefined},
-//                      {note:'C4#', freq:554, key:'l',  keyCode:76, press: false, object: undefined},
-//                      {note:'D4#', freq:622, key:'m',  keyCode:77, press: false, object: undefined}];
-//
-// const INSTRUMENTS:Array<any> = [{name:"phase",   h1:0.5, h2:2,   decayTonal:0.1,  decayH1:0.3, decayH2:0.1,  gainTonal:0.8, gainH1:0.4, gainH2:0.2},
-//                                 {name:"drum",    h1:0.7, h2:0.2, decayTonal:0.5,  decayH1:0.5, decayH2:0.5,  gainTonal:0.8, gainH1:0.4, gainH2:0.4}
-// ]
 var LOOPTAB = [{ src: "data/loop/looperman-l-1319.wav", name: "djumbee1", key: 'a', keyCode: 65, active: false, audio: undefined },
     { src: "data/loop/2990.wav", name: "djumbee2", key: 'z', keyCode: 66, active: false, audio: undefined },
     { src: "data/loop/6067.wav", name: "batterie1", key: 'r', keyCode: 82, active: false, audio: undefined },
@@ -26,10 +6,10 @@ var LOOPTAB = [{ src: "data/loop/looperman-l-1319.wav", name: "djumbee1", key: '
     { src: "data/loop/6073.wav", name: "batterie4", key: 'u', keyCode: 86, active: false, audio: undefined },
     { src: "data/loop/21433.wav", name: "rock1", key: 'o', keyCode: 79, active: false, audio: undefined },
     { src: "data/loop/21437.wav", name: "rock2", key: 'p', keyCode: 80, active: false, audio: undefined }];
-var test = jsonToVar("data.json");
+var data = jsonToVar("data/json/data.json");
 function jsonToVar(file) {
     var xhr = new XMLHttpRequest();
-    xhr.onload = function () { test = JSON.parse(xhr.response); bonjour(); init(); };
+    xhr.onload = function () { data = JSON.parse(xhr.response); bonjour(); init(); };
     xhr.onerror = function () { console.log("Error ajax"); };
     if (file.match(/\.json$/))
         xhr.open("GET", file, true);
@@ -40,8 +20,8 @@ function jsonToVar(file) {
 var INSTRUMENTS;
 var KEYTABAZERTY;
 function bonjour() {
-    INSTRUMENTS = test.INSTRUMENTS;
-    KEYTABAZERTY = test.KEYTABAZERTY;
+    INSTRUMENTS = data.INSTRUMENTS;
+    KEYTABAZERTY = data.KEYTABAZERTY;
 }
 var Note = (function () {
     function Note(note, instrument) {
@@ -175,6 +155,7 @@ var noteRe2;
 var noteMi2;
 var notes = [];
 function init() {
+    createAzertyKeybord();
     window.addEventListener("keydown", noteEvent);
     window.addEventListener("keyup", noteStop);
     notes.push(noteDo = new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[2])));
@@ -196,7 +177,6 @@ function changeInstrument(index) {
     }
 }
 function noteEvent(event) {
-    console.log(event);
     event.preventDefault;
     var key = event.key;
     switch (key) {
@@ -204,47 +184,48 @@ function noteEvent(event) {
             if (!noteDo.press) {
                 noteDo.note.object = noteDo.instrument.play(noteDo.frequency);
                 noteDo.press = true;
-                noteDo.animation = new RoueDentée(0, 10);
-                noteDo.animation.animate();
+                noteDo.animation = new RoueDentée();
+                noteDo.animation.startAnimation(0, 8);
             }
             break;
         case noteRe.key:
             if (!noteRe.press) {
                 noteRe.note.object = noteRe.instrument.play(noteRe.frequency);
                 noteRe.press = true;
-                noteRe.animation = new RoueDentée(10, 10);
-                noteRe.animation.animate();
+                noteRe.animation = new RoueDentée();
+                noteRe.animation.startAnimation(9, 8);
             }
             break;
         case noteMi.key:
             if (!noteMi.press) {
                 noteMi.note.object = noteMi.instrument.play(noteMi.frequency);
                 noteMi.press = true;
-                noteMi.animation = new RoueDentée(20, 10);
-                noteMi.animation.animate();
+                noteMi.animation = new RoueDentée();
+                noteMi.animation.startAnimation(18, 8);
             }
             break;
         case noteFa.key:
             if (!noteFa.press) {
                 noteFa.note.object = noteFa.instrument.play(noteFa.frequency);
                 noteFa.press = true;
-                noteFa.animation = new RoueDentée(30, 10);
-                noteFa.animation.animate();
+                noteFa.animation = new RoueDentée();
+                noteFa.animation.startAnimation(27, 8);
             }
             break;
         case noteSol.key:
             if (!noteSol.press) {
                 noteSol.note.object = noteSol.instrument.play(noteSol.frequency);
                 noteSol.press = true;
-                noteSol.animation = new RoueDentée(40, 10);
-                noteSol.animation.animate();
+                noteSol.animation = new RoueDentée();
+                noteSol.animation.startAnimation(36, 8);
             }
             break;
         case noteLa.key:
             if (!noteLa.press) {
                 noteLa.note.object = noteLa.instrument.play(noteLa.frequency);
                 noteLa.press = true;
-                noteLa.animation = new RoueDentée(50, 10);
+                noteLa.animation = new RoueDentée();
+                noteLa.animation.startAnimation(45, 8);
                 noteLa.animation.animate();
             }
             break;
@@ -252,32 +233,32 @@ function noteEvent(event) {
             if (!noteSi.press) {
                 noteSi.note.object = noteSi.instrument.play(noteSi.frequency);
                 noteSi.press = true;
-                noteSi.animation = new RoueDentée(60, 10);
-                noteSi.animation.animate();
+                noteSi.animation = new RoueDentée();
+                noteSi.animation.startAnimation(54, 8);
             }
             break;
         case noteDo2.key:
             if (!noteDo2.press) {
                 noteDo2.note.object = noteDo2.instrument.play(noteDo2.frequency);
                 noteDo2.press = true;
-                noteDo2.animation = new RoueDentée(70, 10);
-                noteDo2.animation.animate();
+                noteDo2.animation = new RoueDentée();
+                noteDo2.animation.startAnimation(63, 8);
             }
             break;
         case noteRe2.key:
             if (!noteRe2.press) {
                 noteRe2.note.object = noteRe2.instrument.play(noteRe2.frequency);
                 noteRe2.press = true;
-                noteRe2.animation = new RoueDentée(80, 10);
-                noteRe2.animation.animate();
+                noteRe2.animation = new RoueDentée();
+                noteRe2.animation.startAnimation(72, 8);
             }
             break;
         case noteMi2.key:
             if (!noteMi2.press) {
                 noteMi2.note.object = noteMi2.instrument.play(noteMi2.frequency);
                 noteMi2.press = true;
-                noteMi2.animation = new RoueDentée(87, 6);
-                noteMi2.animation.animate();
+                noteMi2.animation = new RoueDentée();
+                noteMi2.animation.startAnimation(81, 8);
             }
             break;
     }
@@ -326,4 +307,32 @@ function noteStop(event) {
             noteMi2.instrument.stop();
             break;
     }
+}
+function createAzertyKeybord() {
+    var parentElement = document.getElementsByTagName('body')[0];
+    var whiteKey = KEYTABAZERTY.filter(function (key) {
+        if (key.note.match(/#$/)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    });
+    var keybord = document.createElement('div');
+    keybord.className += "clavierAzerty";
+    var keys = [];
+    var keylength = (100 / whiteKey.length).toString() + "%";
+    for (var i = 0; i < whiteKey.length; i++) {
+        keys[i] = document.createElement('div');
+        keys[i].style.width = keylength;
+        keys[i].style.height = "100%";
+        keys[i].className += "whitekey";
+        keys[i].innerText = whiteKey[i].note + '  ' + whiteKey[i].key;
+    }
+    for (var i = 0; i < keys.length; i++) {
+        keybord.appendChild(keys[i]);
+    }
+    parentElement.appendChild(keybord);
+    console.log(whiteKey);
+    return whiteKey;
 }

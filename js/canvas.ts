@@ -47,7 +47,7 @@ class RoueDentée{
   private limitLeft:number;
   private limitRight:number;
 
-  constructor(left:number, right:number){
+  constructor(){
     this.canvas = new Canvas(rand(window.innerWidth), rand(window.innerHeight), 80, 80, idGen("canvas"));
     this.htmlCanvas = this.canvas.html;
     this.context = this.htmlCanvas.getContext('2d');
@@ -59,14 +59,15 @@ class RoueDentée{
     this.duree = 10;
     this.speed = 2;
 
-    this.limitLeft = left;
-    this.limitRight = right;
-
-
     this.htmlCanvas.style.position = "absolute";
     this.rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255)+ ")";
     this.avancement = 0;
+  }
+  startAnimation(left:number, right:number){
+    this.limitLeft = left;
+    this.limitRight = right;
     this.randomPlacement();
+    this.animate();
   }
   animate(){
     this.clearCanvas();

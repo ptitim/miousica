@@ -10,4 +10,24 @@
   flex-wrap: wrap;
   background-color: #222; }
 
+.clavierAzerty {
+  display: flex;
+  flex-direction: row;
+  width: 60vmax;
+  height: 25vmin;
+  position: fixed;
+  bottom: 0;
+  left: 20vmax;
+  background-color: silver;
+  border: #909090;
+  align-items: center; }
+
+.whitekey {
+  background-color: white;
+  font-size: 2em;
+  transition: all 0.2s ease-in;
+  border: 2px solid #212121; }
+  .whitekey:hover {
+    background-color: #888888; }
+
 /*# sourceMappingURL=style.css.map */

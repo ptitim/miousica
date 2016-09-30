@@ -11,3 +11,26 @@
     flex-wrap: wrap;
     background-color: #222;
 }
+
+.clavierAzerty{
+    display: flex;
+    flex-direction: row;
+    width:60vmax;
+    height: 25vmin;
+    position: fixed;
+    bottom: 0;
+    left: 20vmax;
+    background-color: silver;
+    border: rgb(144, 144, 144);
+    align-items: center;
+}
+
+.whitekey{
+  background-color: white;
+  font-size: 2em;
+  transition: all 0.2s ease-in;
+  border: 2px solid rgb(33, 33, 33);
+  &:hover{
+    background-color: rgb(136, 136, 136);
+  }
+}

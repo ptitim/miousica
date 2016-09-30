@@ -27,7 +27,7 @@ var Canvas = (function () {
     return Canvas;
 }());
 var RoueDentée = (function () {
-    function RoueDentée(left, right) {
+    function RoueDentée() {
         this.canvas = new Canvas(rand(window.innerWidth), rand(window.innerHeight), 80, 80, idGen("canvas"));
         this.htmlCanvas = this.canvas.html;
         this.context = this.htmlCanvas.getContext('2d');
@@ -38,13 +38,16 @@ var RoueDentée = (function () {
         this.maxLength = 25;
         this.duree = 10;
         this.speed = 2;
-        this.limitLeft = left;
-        this.limitRight = right;
         this.htmlCanvas.style.position = "absolute";
         this.rgb = "rgb(" + rand(255).toString() + "," + rand(255) + "," + rand(255) + ")";
         this.avancement = 0;
-        this.randomPlacement();
     }
+    RoueDentée.prototype.startAnimation = function (left, right) {
+        this.limitLeft = left;
+        this.limitRight = right;
+        this.randomPlacement();
+        this.animate();
+    };
     RoueDentée.prototype.animate = function () {
         this.clearCanvas();
         this.context.strokeStyle = this.rgb;
