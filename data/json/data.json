@@ -17,7 +17,19 @@
                 {"note":"C4#", "freq":554, "key":"l",  "keyCode":76},
                 {"note":"D4#", "freq":622, "key":"m",  "keyCode":77}],
 
-"INSTRUMENTS" : [{"name":"phase",   "h1":0.5, "h2":2,   "decayTonal":0.1,  "decayH1":0.3, "decayH2":0.1,  "gainTonal":0.8, "gainH1":0.4, "gainH2":0.2},
-                 {"name":"drum",    "h1":0.7, "h2":0.2, "decayTonal":0.5,  "decayH1":0.5, "decayH2":0.5,  "gainTonal":0.8, "gainH1":0.4, "gainH2":0.4},
-                 {"name": "organ",  "h1":1,   "h2":2,   "decayTonal":0.02, "decayH1":0.04,"decayH2":0.04, "gainTonal":0.1, "gainH1":0.5, "gainH2":0.4}
+"INSTRUMENTS" : [{"name":"phase", "url":"music-27115_960_720.png",
+                     "h1":0.5, "h2":2,
+                     "decayTonal":0.1,  "decayH1":0.3, "decayH2":0.1,
+                     "gainTonal":0.8, "gainH1":0.4, "gainH2":0.2,
+                     "typeOscTonal": "sine", "typeOscH1": "sine", "typeOscH2": "sine"},
+                 {"name":"drum",  "url":"aural-1297838_960_720.png",
+                     "h1":0.7, "h2":0.2,
+                     "decayTonal":0.5,  "decayH1":0.5, "decayH2":0.5,
+                     "gainTonal":0.8, "gainH1":0.4, "gainH2":0.4,
+                     "typeOscTonal": "triangle", "typeOscH1": "sine", "typeOscH2": "sawtooth"},
+                 {"name": "organ", "url":"music-27115_960_720.png",
+                     "h1":1,   "h2":2,
+                     "decayTonal":0.02, "decayH1":0.04,"decayH2":0.04,
+                     "gainTonal":0.3, "gainH1":0.5, "gainH2":0.4,
+                     "typeOscTonal": "sine", "typeOscH1": "sine", "typeOscH2": "sine"}
                 ]}

@@ -12,25 +12,49 @@
     background-color: #222;
 }
 
-.clavierAzerty{
-    display: flex;
-    flex-direction: row;
-    width:60vmax;
-    height: 25vmin;
-    position: fixed;
-    bottom: 0;
-    left: 20vmax;
-    background-color: silver;
-    border: rgb(144, 144, 144);
-    align-items: center;
+.instru{
+  // background-clip: content-box;
+  display: flex;
+  color: rgb(164, 109, 109);
+  flex-direction: column-reverse;;
+  background-size: contain;
+}
+.img{
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 7vh;
 }
 
-.whitekey{
-  background-color: white;
-  font-size: 2em;
-  transition: all 0.2s ease-in;
-  border: 2px solid rgb(33, 33, 33);
-  &:hover{
-    background-color: rgb(136, 136, 136);
-  }
+$shadowInstru : rgb(92, 92, 92);
+.menuHaut{
+    display: flex;
+    flex-direction:column;
+    align-items: flex-end;
+    // justify-content: space-between;
+    color: rgb(230, 190, 154);
+    position: absolute;
+    top: -2vh;
+    left: 25vw;
+    min-width: 30vw;
+    height: 2vh;
+    border: 1px solid rgb(142, 142, 142);
+    border-radius: 5px;
+    transition: all 0.2s linear;
+    &:hover{
+      height: 16vh;
+      box-shadow: 4px 4px $shadowInstru, -4px 4px $shadowInstru;
+    }
+    &:focus{
+      height: 10vh;
+      box-shadow: 4px 4px $shadowInstru, -4px 4px $shadowInstru;
+    }
+}
+
+.choixInstru{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
 }

@@ -47,9 +47,9 @@ var Instrument = (function () {
         this.decayH1 = prop.decayH1;
         this.harmo2 = prop.h2;
         this.decayH2 = prop.decayH2;
-        this.setOscTonal("sine");
-        this.setOscH1("sine");
-        this.setOscH2("sine");
+        this.typeOscTonal = prop.typeOscTonal || "sine";
+        this.typeOscH1 = prop.typeOscH1 || "sine";
+        this.typeOscH2 = prop.typeOscH2 || "sine";
         this.gainTonalInitialValue = prop.gainTonal || 1;
         this.gainH1InitialValue = prop.gainH1 || 0.5;
         this.gainH2InitialValue = prop.gainH2 || 0.3;
@@ -142,7 +142,6 @@ var Instrument = (function () {
     return Instrument;
 }());
 ;
-// var piano = new Instrument(INSTRUMENTS[0]);
 var noteDo;
 var noteRe;
 var noteMi;
@@ -155,7 +154,9 @@ var noteRe2;
 var noteMi2;
 var notes = [];
 function init() {
-    createAzertyKeybord();
+    createMenu();
+    var htmlinstru2 = document.getElementById('instrument2');
+    htmlinstru2.style.color = "white";
     window.addEventListener("keydown", noteEvent);
     window.addEventListener("keyup", noteStop);
     notes.push(noteDo = new Note(KEYTABAZERTY[0], new Instrument(INSTRUMENTS[2])));
@@ -308,31 +309,35 @@ function noteStop(event) {
             break;
     }
 }
-function createAzertyKeybord() {
-    var parentElement = document.getElementsByTagName('body')[0];
-    var whiteKey = KEYTABAZERTY.filter(function (key) {
-        if (key.note.match(/#$/)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+var divtabs = [];
+function createMenu() {
+    var eleParent = document.getElementsByClassName('choixInstru')[0];
+    var i = 0;
+    for (var _i = 0, INSTRUMENTS_1 = INSTRUMENTS; _i < INSTRUMENTS_1.length; _i++) {
+        var ele = INSTRUMENTS_1[_i];
+        var divtmp = document.createElement('div');
+        var img = document.createElement('div');
+        img.style.backgroundImage = "url('data/img/" + ele.url + "')";
+        img.className = 'img';
+        img.style.pointerEvents = 'none';
+        divtmp.className = "instru";
+        divtmp.innerText = ele.name;
+        divtmp.id = "instrument" + i.toString();
+        divtmp.setAttribute('data-indexinstru', i.toString());
+        divtmp.addEventListener('click', redir);
+        i++;
+        divtabs.push(divtmp);
+        eleParent.appendChild(divtmp);
+        divtmp.appendChild(img);
+    }
+}
+// fonction click choix instrument
+function redir(event) {
+    console.log(event.target.dataset.indexinstru);
+    console.log(event);
+    divtabs.forEach(function (ele, index, array) {
+        ele.style.color = "rgb(164, 109, 109)";
     });
-    var keybord = document.createElement('div');
-    keybord.className += "clavierAzerty";
-    var keys = [];
-    var keylength = (100 / whiteKey.length).toString() + "%";
-    for (var i = 0; i < whiteKey.length; i++) {
-        keys[i] = document.createElement('div');
-        keys[i].style.width = keylength;
-        keys[i].style.height = "100%";
-        keys[i].className += "whitekey";
-        keys[i].innerText = whiteKey[i].note + '  ' + whiteKey[i].key;
-    }
-    for (var i = 0; i < keys.length; i++) {
-        keybord.appendChild(keys[i]);
-    }
-    parentElement.appendChild(keybord);
-    console.log(whiteKey);
-    return whiteKey;
+    event.target.style.color = "white";
+    notes.forEach(function (x) { return x.setInstrument(new Instrument(INSTRUMENTS[Number(event.target.dataset.indexinstru)])); });
 }

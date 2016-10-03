@@ -10,24 +10,43 @@
   flex-wrap: wrap;
   background-color: #222; }
 
-.clavierAzerty {
+.instru {
+  display: flex;
+  color: #a46d6d;
+  flex-direction: column-reverse;
+  background-size: contain; }
+
+.img {
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 7vh; }
+
+.menuHaut {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #e6be9a;
+  position: absolute;
+  top: -2vh;
+  left: 25vw;
+  min-width: 30vw;
+  height: 2vh;
+  border: 1px solid #8e8e8e;
+  border-radius: 5px;
+  transition: all 0.2s linear; }
+  .menuHaut:hover {
+    height: 16vh;
+    box-shadow: 4px 4px #5c5c5c, -4px 4px #5c5c5c; }
+  .menuHaut:focus {
+    height: 10vh;
+    box-shadow: 4px 4px #5c5c5c, -4px 4px #5c5c5c; }
+
+.choixInstru {
   display: flex;
   flex-direction: row;
-  width: 60vmax;
-  height: 25vmin;
-  position: fixed;
-  bottom: 0;
-  left: 20vmax;
-  background-color: silver;
-  border: #909090;
-  align-items: center; }
-
-.whitekey {
-  background-color: white;
-  font-size: 2em;
-  transition: all 0.2s ease-in;
-  border: 2px solid #212121; }
-  .whitekey:hover {
-    background-color: #888888; }
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%; }
 
 /*# sourceMappingURL=style.css.map */
